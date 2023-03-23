@@ -92,7 +92,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     const SnackBar(
                         content:
                         Text('Profanity Not Found in Text'),
-                        backgroundColor: Colors.lightGreen,
+                        backgroundColor: Colors.green,
                     ),
                   );
                 }
