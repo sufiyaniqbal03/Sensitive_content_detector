@@ -1,8 +1,8 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import './Sensitive_contentDetector_func/Profanity_checkfunc.dart';
+import './Sensitive_contentDetector_func/Nudity_imagecheck.dart';
 
 void main() {
   runApp(const MyApp());
@@ -42,8 +42,18 @@ class _MyHomePageState extends State<MyHomePage> {
       setState(() {
         _image = File(pickedFile.path);
       });
+      // Call the function to detect nudity in the image
+      final result = await detectNudityInImage(_image!);
+      // Display feedback for whether or not nudity was detected
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(result ? 'Nudity detected in image' : 'No nudity detected in image'),
+          backgroundColor: result ? Colors.red : Colors.green,
+        ),
+      );
     }
   }
+
 
 
 
@@ -100,57 +110,57 @@ class _MyHomePageState extends State<MyHomePage> {
               child: const Text('Check for profanity'),
             ),
 
-            // const SizedBox(height: 20.0),
-            // Center(
-            //   child: Column(
-            //     children: <Widget>[
-            //       if (_image != null) ...[
-            //         Image.file(
-            //           _image!,
-            //           height: 150.0,
-            //           width: 150.0,
-            //         ),
-            //         const SizedBox(height: 10.0),
-            //       ],
+            const SizedBox(height: 20.0),
+            Center(
+              child: Column(
+                children: <Widget>[
+                  if (_image != null) ...[
+                    Image.file(
+                      _image!,
+                      height: 150.0,
+                      width: 150.0,
+                    ),
+                    const SizedBox(height: 10.0),
+                  ],
 
 
 
-                  // ElevatedButton(
-                  //   onPressed: () {
-                  //     showModalBottomSheet(
-                  //       context: context,
-                  //       builder: (BuildContext context) {
-                  //         return SafeArea(
-                  //           child: Column(
-                  //             mainAxisSize: MainAxisSize.min,
-                  //             children: <Widget>[
-                  //               ListTile(
-                  //                 leading: const Icon(Icons.camera_alt),
-                  //                 title: const Text('Take a photo'),
-                  //                 onTap: () {
-                  //                   _pickImage(ImageSource.camera);
-                  //                   Navigator.pop(context);
-                  //                 },
-                  //               ),
-                  //               ListTile(
-                  //                 leading: const Icon(Icons.image),
-                  //                 title: const Text('Choose from gallery'),
-                  //                 onTap: () {
-                  //                   _pickImage(ImageSource.gallery);
-                  //                   Navigator.pop(context);
-                  //                 },
-                  //               ),
-                  //             ],
-                  //           ),
-                  //         );
-                  //       },
-                  //     );
-                  //   },
-                  //   child: const Text('Choose an image'),
-                  // ),
-            //     ],
-            //   ),
-            // ),
+                  ElevatedButton(
+                    onPressed: () {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return SafeArea(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                ListTile(
+                                  leading: const Icon(Icons.camera_alt),
+                                  title: const Text('Take a photo'),
+                                  onTap: () {
+                                    _pickImage(ImageSource.camera);
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                                ListTile(
+                                  leading: const Icon(Icons.image),
+                                  title: const Text('Choose from gallery'),
+                                  onTap: () {
+                                    _pickImage(ImageSource.gallery);
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    child: const Text('Choose an image'),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
